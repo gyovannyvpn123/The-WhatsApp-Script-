@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Automation Server</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-5 mb-4">WhatsApp Automation Server</h1>
+                <p class="lead mb-5">Automate WhatsApp messaging with our secure and reliable platform</p>
+                
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-4 me-sm-3">Login</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg px-4">Register</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card mb-4 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-shield-lock fs-1 mb-3 text-primary"></i>
+                        <h5 class="card-title">Secure</h5>
+                        <p class="card-text">End-to-end encryption for all your WhatsApp messaging needs</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-clock-history fs-1 mb-3 text-primary"></i>
+                        <h5 class="card-title">Automated</h5>
+                        <p class="card-text">Automate your WhatsApp messages with custom delays and targeting</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 text-center">
+                    <div class="card-body">
+                        <i class="bi bi-people fs-1 mb-3 text-primary"></i>
+                        <h5 class="card-title">Multi-User</h5>
+                        <p class="card-text">Multiple isolated user sessions for team collaboration</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark text-center">
+        <div class="container">
+            <span class="text-muted">WhatsApp Automation Server &copy; 2023</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

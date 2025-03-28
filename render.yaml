@@ -1,0 +1,50 @@
+services:
+  # A Flask web service
+  - type: web
+    name: whatsapp-automation
+    env: python
+    plan: starter
+    buildCommand: |
+      # Instalăm Chrome și ChromeDriver
+      apt-get update -q && apt-get install -y wget gnupg unzip xvfb
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+      echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+      apt-get update -q && apt-get install -y google-chrome-stable
+      
+      # Descărcăm ChromeDriver care se potrivește cu versiunea Chrome
+      CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}' | cut -d. -f1,2,3)
+      CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+      wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+      unzip chromedriver_linux64.zip -d /usr/local/bin/
+      chmod +x /usr/local/bin/chromedriver
+      
+      # Setăm Xvfb pentru suport browser non-headless (pentru WhatsApp)
+      Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
+      export DISPLAY=:99
+      
+      # Instalăm pachetele Python
+      pip install -r render_requirements.txt
+      
+      # Pentru a crea tabelele în baza de date la prima rulare
+      python -c "from app import app, db; from models import User, Session, MessageCampaign; app.app_context().push(); db.create_all()"
+      
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 8 main:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: whatsapp-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: DISPLAY
+        value: ":99"
+      - key: PYTHONUNBUFFERED
+        value: "true"
+
+databases:
+  - name: whatsapp-db
+    plan: starter
+    databaseName: whatsapp_automation
+    user: whatsapp_user
